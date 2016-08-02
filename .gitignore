@@ -1,0 +1,4 @@
+.hgignore
+.project
+**/.hg/*
+**/.idea/*
