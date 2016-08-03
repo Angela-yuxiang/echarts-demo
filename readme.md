@@ -60,8 +60,12 @@ ECharts 3 开始不再强制使用 AMD 的方式按需引入，代码里也不�
  - 设置标题 `title.text`
  - 提示器 `tooltop.trigger`
  - 工具盒 `toolbox` 可以修改工具盒样式等，保存图片的样式等
- - 绘制区域间距 containLabel: false // 坐标轴刻度是否包含在间距内,true：不包含,false：包含
- - x轴
+ - 绘制区域间距 `grid`
+  - `grid.containLabel`: false // 坐标轴刻度是否包含在间距内,true：不包含,false：包含
+  - `grid.left`,`grid.top`,`grid.bottom`,`grid.right`
+ - x轴 `xAxis`
+  - `xAxis.boundaryGap` 坐标轴两边留白策略，类目轴和非类目轴的设置和表现不一样。 true：留白;false：不留白（顶在最前面）
+  - `xAxis.splitLine` 分割线
  - 系列列表
  
 ```javascript
@@ -98,6 +102,7 @@ option = {
 		{
 			type: 'category',
 			boundaryGap: false,
+			splitLine: {show: true},
 			data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
 		}
 	],
@@ -147,3 +152,19 @@ option = {
 	]
 };
 ```
+
+# demo03 柱状图
+ - `xAxis.axisTick` 坐标轴刻度相关设置。 
+  - `xAxis.axisTick.alignWithLabel` 类目轴中在 boundaryGap 为 true 的时候有效，可以保证刻度线和标签对齐。所以是共同设置为true，这样刻度尺就会在bar中间
+ - `tooltip.axisPointer` 坐标轴指示器配置项，在 trigger 为 'axis' 时有效。
+  - `tooltip.axisPointer.type` 指示器类型。
+   - `tooltip.axisPointer.type.line` 直线指示器
+   - `tooltip.axisPointer.type.cross` 十字准星指示器
+   - `tooltip.axisPointer.type.shadow` 阴影指示器
+
+# demo04 散点图
+ - `xAxis.axisLine` 坐标轴
+  - `xAxis.axisLine.show` 是否显示轴线 true | false ,default:true 显示
+
+
+  
