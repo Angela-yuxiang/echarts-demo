@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no"/>
+	<title>Document</title>
+	<script src="../assets/echarts.min.js"></script>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+		}
+	</style>
+</head>
+<body>
+<div id="container"></div>
+<script type="text/javascript">
+	var w = document.documentElement.clientWidth,
+			h = document.documentElement.clientHeight,
+			ctner = document.getElementById("container");
+	ctner.style.cssText = "width:" + w + "px;height:" + h + "px;";
+
+	var myChart = echarts.init(ctner);
+
+	var option = {
+		backgroundColor: '#2c343c',
+		title: {
+			textStyle:{
+				color: "rgba(255,255,255,.5)"
+			},
+			text: "饼图"
+		},
+		legend: {
+			orient: "horizontal",
+			left: "right",
+			data: ["直接访问", "邮件营销", "联盟广告", "视频广告", "搜索引擎"],
+			textStyle: {
+				color: "rgba(255,255,255,.5)"
+			}
+		},
+		tooltip: {
+			trigger: "item",
+			formatter: "{a} <br/>{b}: {c} ({d}%)"
+		},
+		series: [
+			{
+				name: "访问来源",
+				type: "pie",
+				radius: "50%",
+				center: ["50%", "50%"],
+				selectedMode: "multiple", // 是否多选
+				startAngle: 120, // 起始角度，支持范围[0, 360]。
+				animationDuration: 3000, // 处世动画执行时间 3000ms
+				data: [
+					{value: 335, name: '直接访问'},
+					{value: 310, name: '邮件营销'},
+					{value: 234, name: '联盟广告'},
+					{value: 135, name: '视频广告'},
+					{value: 1548, name: '搜索引擎'}
+				]
+			}
+		]
+	};
+
+	myChart.setOption(option);
+
+</script>
+</body>
+</html>

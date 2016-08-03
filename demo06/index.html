@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no"/>
+	<title>Document</title>
+	<script src="../assets/echarts.min.js"></script>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+		}
+	</style>
+</head>
+<body>
+<div id="container"></div>
+<script type="text/javascript">
+	var w = document.documentElement.clientWidth,
+			h = document.documentElement.clientHeight,
+			ctner = document.getElementById("container");
+	ctner.style.cssText = "width:" + w + "px;height:" + h + "px;";
+
+	var myChart = echarts.init(ctner);
+
+	var option = {
+		tooltip: {
+			formatter: "{a} <br/>{b} : {c}%"
+		},
+		series: [{
+			name: "业务指标",
+			type: "gauge",
+			detail: {formatter: "{value}%"},
+			data: [{value: 32, name: "完成率"}]
+		}]
+	};
+	myChart.setOption(option);
+	setInterval(function () {
+		option.series[0].data[0].value = +(Math.random() * 100).toFixed(2);
+		myChart.setOption(option);
+	}, 500);
+</script>
+</body>
+</html>

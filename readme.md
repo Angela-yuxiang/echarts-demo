@@ -1,3 +1,6 @@
+Tags: echarts
+# echarts demo 学习记录
+
 # 引入 ECharts
 ECharts 3 开始不再强制使用 AMD 的方式按需引入，代码里也不再内置 AMD 加载器。因此引入方式简单了很多，只需要像普通的 JavaScript 库一样用 script 标签引入。
 ```
@@ -162,9 +165,224 @@ option = {
    - `tooltip.axisPointer.type.cross` 十字准星指示器
    - `tooltip.axisPointer.type.shadow` 阴影指示器
 
-# demo04 散点图
- - `xAxis.axisLine` 坐标轴
-  - `xAxis.axisLine.show` 是否显示轴线 true | false ,default:true 显示
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no"/>
+	<title>Document</title>
+	<script src="../assets/echarts.min.js"></script>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+		}
+	</style>
+</head>
+<body>
+<div id="container"></div>
+<script type="text/javascript">
+	var w = document.documentElement.clientWidth,
+			h = document.documentElement.clientHeight,
+			ctner = document.getElementById("container");
+	ctner.style.cssText = "width:" + w + "px;height:" + h + "px;";
+
+	var myChart = echarts.init(ctner);
+
+	option = {
+		tooltip : {
+			trigger: 'axis',
+			axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+				type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+			}
+		},
+		legend: {
+			data:['直接访问','邮件营销','联盟广告','视频广告','搜索引擎','百度','谷歌','必应','其他']
+		},
+		grid: {
+			left: '3%',
+			right: '4%',
+			bottom: '3%',
+			containLabel: true
+		},
+		xAxis : [
+			{
+				type : 'category',
+				boundaryGap: true,
+				axisTick: {
+					alignWithLabel: true
+				},
+				data : ['周一','周二','周三','周四','周五','周六','周日']
+			}
+		],
+		yAxis : {},
+		series : [
+			{
+				name:'直接访问',
+				type:'bar',
+				data:[320, 332, 301, 334, 390, 330, 320]
+			},
+			{
+				name:'邮件营销',
+				type:'bar',
+				stack: '广告',
+				data:[120, 132, 101, 134, 90, 230, 210]
+			},
+			{
+				name:'联盟广告',
+				type:'bar',
+				stack: '广告',
+				data:[220, 182, 191, 234, 290, 330, 310]
+			},
+			{
+				name:'视频广告',
+				type:'bar',
+				stack: '广告',
+				data:[150, 232, 201, 154, 190, 330, 410]
+			},
+			{
+				name:'搜索引擎',
+				type:'bar',
+				data:[862, 1018, 964, 1026, 1679, 1600, 1570],
+				markLine : {
+					lineStyle: {
+						normal: {
+							type: 'dashed'
+						}
+					},
+					data : [
+						[{type : 'min'}, {type : 'max'}]
+					]
+				}
+			},
+			{
+				name:'百度',
+				type:'bar',
+				barWidth : 5,
+				stack: '搜索引擎',
+				data:[620, 732, 701, 734, 1090, 1130, 1120]
+			},
+			{
+				name:'谷歌',
+				type:'bar',
+				stack: '搜索引擎',
+				data:[120, 132, 101, 134, 290, 230, 220]
+			},
+			{
+				name:'必应',
+				type:'bar',
+				stack: '搜索引擎',
+				data:[60, 72, 71, 74, 190, 130, 110]
+			},
+			{
+				name:'其他',
+				type:'bar',
+				stack: '搜索引擎',
+				data:[62, 82, 91, 84, 109, 110, 120]
+			}
+		]
+	};
 
 
-  
+	myChart.setOption(option);
+
+</script>
+</body>
+</html>
+```
+
+# demo04 柱状图折线图切换
+ - X轴垂直辅助线
+ - 数据缩放
+ - 视图重置
+ - 视图图例切换
+ - 标记线（平均线，最小值到最大值线）
+ - 标记点（最大值、最小值）
+
+```javascript
+toolbox: {
+	show: true, // 工具箱展示
+	feature: {
+		dataZoom: { // 数据缩放
+			show: true
+		},
+		restore: { // 操作重置
+			show: true
+		},
+		magicType: {
+			type: ["line", "bar"] // 柱状图与折线图切换
+		}
+	}
+},
+```
+
+```
+xAxis: {
+	boundaryGap: true, // 直方图与两边有见习
+	axisTick: { // 刻度对齐直方图中间
+		alignWithLabel: true
+	},
+	splitLine: { // x轴辅助线
+		show: true
+	},
+	data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"]
+},
+```
+
+```
+series: [{
+	name: '销量',
+	type: 'bar',
+	data: [5, 20, 36, 10, 10, 20],
+	label: {
+		normal: {
+			show: true,
+			position: 'top'
+		}
+	},
+	markPoint: { // 标记点
+		data: [
+			{type: "max", name: "最大值"}, // 会标记出来最大值
+			{type: "min", name: "最小值"}, // 会标记出来最小值
+		]
+	},
+	markLine: { // 标记线
+		data: [
+			{type: "average", name: "平均值"} // 会画出一条平均线,
+			[{type: 'min', name: "最小值"}, {type: 'max', name: "最大值"}] // 会画出一条从最小值到最大值的线段
+		]
+	}
+}]
+```
+![demo04](./mdimg/demo04.png)
+
+# demo05 饼图
+用于直观展示数据占比。
+
+ - `legend.orient` 可选：'horizontal' // 水平排列 | 'vertical' // 垂直排列
+ - [series[i]-pie.radius](http://echarts.baidu.com/option.html#series-pie.radius) [ default: [0, '75%']]饼图的半径，数组的第一项是内半径，第二项是外半径。支持设置成百分比，相对于容器高宽中较小的一项的一半。可以将内半径设大显示成圆环图（Donut chart）。
+ - `series-pie.center` 饼图的中心（圆心）坐标，数组的第一项是横坐标，第二项是纵坐标。支持设置成百分比，设置成百分比时第一项是相对于容器宽度，第二项是相对于容器高度。
+ - `series.selectedMode` 是否多选
+ - `series.startAngle` 起始角度，支持范围[0, 360]。
+ - `series.animationDuration` 处世动画执行时间 3000ms
+![饼图](./mdimg/1470240171512_5.png)
+
+# demo06 仪表图
+用于展示数据在某一区间具体的位置。
+模拟运动的仪表盘。
+code: 简单的实现方式。
+```javascript 
+var option = {
+	tooltip: {
+		formatter: "{a} <br/>{b} : {c}%"
+	},
+	series: [{
+		name: "业务指标",
+		type: "gauge",
+		detail: {formatter: "{value}%"},
+		data: [{value: 32, name: "完成率"}]
+	}]
+};
+```
+![仪表盘](./mdimg/1470241013655_6.png)
