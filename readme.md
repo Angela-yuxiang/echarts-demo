@@ -560,3 +560,6 @@ option = {
 	}]
 };
 ```
+![demo08](./mdimg/demo08.png)
+
+# demo09 dataZoom 区域缩放-用于大数据展示

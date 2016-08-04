@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no"/>
+	<title>Document</title>
+	<script src="../assets/echarts.min.js"></script>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+		}
+
+		#container {
+			-webkit-transform: translate3d(0, 0, 0);
+			transform: translate3d(0, 0, 0);
+		}
+	</style>
+</head>
+<body>
+<div id="container"></div>
+<script type="text/javascript">
+	var w = document.documentElement.clientWidth,
+			h = document.documentElement.clientHeight,
+			ctner = document.getElementById("container");
+	ctner.style.cssText = "width:" + w + "px;height:" + h + "px;";
+
+	var myChart = echarts.init(ctner);
+
+
+	var base = new Date(2004, 9, 3); // Thu Oct 03 1968 00:00:00 GMT+0800 (中国标准时间)
+	base = +base; // -39340800000
+	var oneDay = 24 * 3600 * 1000; // 一天转毫秒
+	var date = [];
+	var data = [Math.random() * 300];
+	for (var i = 1; i < 1095; i++) {
+		// base += oneDay --- base = base+oneDay
+		var now = new Date(base += oneDay); // base值一直在增大
+		var dateArr = [now.getFullYear(), now.getMonth() + 1, now.getDate()];// 1968-10-4,1968-10-5,1968-10-6...
+		var dataRound = Math.round((Math.random() - 0.5) * 20 + data[i - 1]); // 可能是正数也可能是负数
+
+		date.push(dateArr.join('-'));
+		data.push(dataRound);
+	}
+	console.log(date.length); // 3549
+	console.log(data.length); // 3650
+
+	var option = {
+		tooltip: {
+			trigger: 'axis',
+			position: function (pt) {
+				return [pt[0], '10%']; // pt 是鼠标位置， [pt[0], '10%']代表固定在顶部10%位置
+			}
+		},
+		title: {
+			left: 'center',
+			text: '大数据量折线图'
+		},
+		legend: {
+			left: 'left',
+			data: ['legend']
+		},
+		toolbox: {
+			show: true,
+			feature: {
+				dataView: {show: true, readOnly: true},
+				dataZoom: {
+					show: true
+				},
+				restore: {show: true}
+			}
+		},
+		xAxis: {
+			type: "category",
+			data: date // 使用date的值刻度
+		},
+		yAxis: {},
+		dataZoom: [{
+			type: 'slider',
+//			zoomLock: true,
+			start: 0,
+			end: 10
+		}],
+		series: [
+			{
+				name: "legend", // 对应legend
+				type: "line",
+				smooth: true, // 是否平滑显示
+//				sampling: 'average',
+				data: data
+			}
+		]
+	};
+
+	myChart.setOption(option);
+
+</script>
+</body>
+</html>
