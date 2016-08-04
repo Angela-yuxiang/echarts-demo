@@ -59,7 +59,7 @@ ECharts 3 开始不再强制使用 AMD 的方式按需引入，代码里也不�
 </body>
 </html>
 ```
-# demo02 折线图width toolbox 保存图片
+# demo02 折线图toolbox 保存图片
  - 设置标题 `title.text`
  - 提示器 `tooltop.trigger`
  - 工具盒 `toolbox` 可以修改工具盒样式等，保存图片的样式等
@@ -365,7 +365,8 @@ series: [{
  - `series-pie.center` 饼图的中心（圆心）坐标，数组的第一项是横坐标，第二项是纵坐标。支持设置成百分比，设置成百分比时第一项是相对于容器宽度，第二项是相对于容器高度。
  - `series.selectedMode` 是否多选
  - `series.startAngle` 起始角度，支持范围[0, 360]。
- - `series.animationDuration` 处世动画执行时间 3000ms
+ - `series.animationDuration` 初始动画执行时间 3000ms
+
 ![饼图](./mdimg/1470240171512_5.png)
 
 # demo06 仪表图
@@ -386,3 +387,176 @@ var option = {
 };
 ```
 ![仪表盘](./mdimg/1470241013655_6.png)
+
+# demo07 双纵坐标轴
+```
+var zhengfaliang = {
+	name: '蒸发量',
+	type: 'bar',
+	data: [2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3]
+};
+
+var jiangshuiliang = {
+	name: '降水量',
+	type: 'bar',
+	data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 180, 48.7, 18.8, 6.0, 2.3]
+};
+
+var pingjunwendu = {
+	name: '平均温度',
+	type: 'line',
+	yAxisIndex: 1,
+	data: [2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2]
+};
+var option = {
+		title: {
+			text: "降雨量",
+			left: "left"
+		},
+		legend: {
+			data: ["蒸发量", "降水量", "平均温度"]
+		},
+		tooltip: {
+			trigger: "axis",
+			axisPointer: {
+				type: "shadow"
+			}
+		},
+		xAxis: {
+//			type: "category",
+			data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+		},
+		yAxis: [
+			{
+				type: "value",
+				name: "水量",
+				axisLabel: {
+					formatter: '{value} ml'
+				}
+			},
+			{
+				type: "value",
+				name: "温度",
+				axisLabel: {
+					formatter: "{value} ℃"
+				}
+			}
+		],
+		series: [zhengfaliang, jiangshuiliang, pingjunwendu]
+
+	};
+```
+![demo07](./mdimg/demo07.png)
+
+# demo08 散点图
+
+ - `series.symbolSize` 形状大小 默认10
+ - `series.scatter.label` 图形上的文本标签 
+ - `series.scatter.itemStyle` 图形样式
+
+```
+option = {
+	backgroundColor: new echarts.graphic.RadialGradient(0.3, 0.3, 0.8, [{
+		offset: 0,
+		color: '#f7f8fa'
+	}, {
+		offset: 1,
+		color: '#cdd0d5'
+	}]),
+	title: {
+		text: '1990 与 2015 年各国家人均寿命与 GDP'
+	},
+	legend: {
+		right: 10,
+		data: ['1990', '2015']
+	},
+	tooltip: {
+		formatter: function (d) {
+			var data = d.data;
+			var style = {};
+			style.year = "<div style='border-bottom: 1px solid #ddd'>" + data[4] + "年</div>";
+			style.gdp = "<p>GPD：" + data[0] + "</p>";
+			style.old = "<p>平均年龄：" + data[1] + "</p>";
+			style.population = "<p>人口：" + data[2] + "</p>";
+			style.country = "<p>国家：" + data[3] + "</p>";
+			return style.year + style.gdp + style.old + style.population + style.country;
+		}
+	},
+	xAxis: {
+		splitLine: {
+			lineStyle: {
+				type: 'dashed'
+			}
+		}
+	},
+	yAxis: {
+		splitLine: {
+			lineStyle: {
+				type: 'dashed'
+			}
+		},
+		scale: true
+	},
+	series: [{
+		name: '1990',
+		data: data[0], // GDP
+		type: 'scatter',
+		symbolSize: function (data) { // 形状太小，默认10，这里是根据人口来计算的大小
+			return Math.sqrt(data[2]) / 5e2; // 5e2= 5*(10*2)=500, so,9e3 = 9*(100*3) = 9000
+		},
+		label: { // 图形上的文本标签
+			normal: { // 放上去显示
+				show: true,
+				formatter: function (param) {
+					return param.data[3];
+				},
+				position: 'bottom'
+			}
+		},
+		itemStyle: { // 图形样式，有 normal 和 emphasis 两个状态。normal 是图形在默认状态下的样式；emphasis 是图形在高亮状态下的样式，比如在鼠标悬浮或者图例联动高亮时。
+			normal: {
+				shadowBlur: 10,
+				shadowColor: 'rgba(120, 36, 50, 0.5)',
+				shadowOffsetY: 5,
+				color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
+					offset: 0,
+					color: 'rgb(251, 118, 123)'
+				}, {
+					offset: 1,
+					color: 'rgb(204, 46, 72)'
+				}])
+			}
+		}
+	}, {
+		name: '2015',
+		data: data[1], // 年龄
+		type: 'scatter',
+		symbolSize: function (data) {
+			return Math.sqrt(data[2]) / 5e2;
+		},
+		label: {
+			normal: {
+				show: true,
+				formatter: function (param) {
+					return param.data[3];
+				},
+				position: 'top'
+			}
+		},
+		itemStyle: {
+			normal: {
+				shadowBlur: 10,
+				shadowColor: 'rgba(25, 100, 150, 0.5)',
+				shadowOffsetY: 5,
+				color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
+					offset: 0,
+					color: 'rgb(129, 227, 238)'
+				}, {
+					offset: 1,
+					color: 'rgb(25, 183, 207)'
+				}])
+			}
+		}
+	}]
+};
+```

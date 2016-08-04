@@ -479,8 +479,9 @@ code {
   padding-bottom: 0.2em;
   margin: 0;
   font-size: 85%;
-  background-color: rgba(0,0,0,0.04);
+  background-color: #221a0f;
   border-radius: 3px;
+  color: #E91E63;
 }
 
 code:before,
@@ -497,6 +498,7 @@ pre>code {
   white-space: pre;
   background: transparent;
   border: 0;
+  color: inherit;
 }
 
 .highlight {
@@ -1011,7 +1013,7 @@ vertical-align:1px;
 &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-</code></pre><h1 id="demo02-width-toolbox-">demo02 折线图width toolbox 保存图片</h1>
+</code></pre><h1 id="demo02-toolbox-">demo02 折线图toolbox 保存图片</h1>
 <ul>
 <li>设置标题 <code>title.text</code></li><li>提示器 <code>tooltop.trigger</code></li><li>工具盒 <code>toolbox</code> 可以修改工具盒样式等，保存图片的样式等</li><li>绘制区域间距 <code>grid</code><ul>
 <li><code>grid.containLabel</code>: false // 坐标轴刻度是否包含在间距内,true：不包含,false：包含</li><li><code>grid.left</code>,<code>grid.top</code>,<code>grid.bottom</code>,<code>grid.right</code></li></ul>
@@ -1105,7 +1107,7 @@ vertical-align:1px;
 <ul>
 <li><code>xAxis.axisTick</code> 坐标轴刻度相关设置。 <ul>
 <li><code>xAxis.axisTick.alignWithLabel</code> 类目轴中在 boundaryGap 为 true 的时候有效，可以保证刻度线和标签对齐。所以是共同设置为true，这样刻度尺就会在bar中间</li></ul>
-</li><li><code>tooltip.axisPointer</code> 坐标轴指示器配置项，在 trigger 为 &#39;axis&#39; 时有效。<ul>
+</li><li><code>tooltip.axisPointer</code> 坐标轴指示器配置项，在 trigger 为 ‘axis’ 时有效。<ul>
 <li><code>tooltip.axisPointer.type</code> 指示器类型。</li><li><code>tooltip.axisPointer.type.line</code> 直线指示器</li><li><code>tooltip.axisPointer.type.cross</code> 十字准星指示器</li><li><code>tooltip.axisPointer.type.shadow</code> 阴影指示器</li></ul>
 </li></ul>
 <pre><code class="lang-html">&lt;!DOCTYPE html&gt;
@@ -1288,7 +1290,8 @@ vertical-align:1px;
 <h1 id="demo05-">demo05 饼图</h1>
 <p>用于直观展示数据占比。</p>
 <ul>
-<li><code>legend.orient</code> 可选：&#39;horizontal&#39; // 水平排列 | &#39;vertical&#39; // 垂直排列</li><li><a href="http://echarts.baidu.com/option.html#series-pie.radius">series[i]-pie.radius</a> [ default: [0, &#39;75%&#39;]]饼图的半径，数组的第一项是内半径，第二项是外半径。支持设置成百分比，相对于容器高宽中较小的一项的一半。可以将内半径设大显示成圆环图（Donut chart）。</li><li><code>series-pie.center</code> 饼图的中心（圆心）坐标，数组的第一项是横坐标，第二项是纵坐标。支持设置成百分比，设置成百分比时第一项是相对于容器宽度，第二项是相对于容器高度。</li><li><code>series.selectedMode</code> 是否多选</li><li><code>series.startAngle</code> 起始角度，支持范围[0, 360]。</li><li><code>series.animationDuration</code> 处世动画执行时间 3000ms<br><img src="./mdimg/1470240171512_5.png" alt="饼图"></li></ul>
+<li><code>legend.orient</code> 可选：’horizontal’ // 水平排列 | ‘vertical’ // 垂直排列</li><li><a href="http://echarts.baidu.com/option.html#series-pie.radius">series[i]-pie.radius</a> [ default: [0, ‘75%’]]饼图的半径，数组的第一项是内半径，第二项是外半径。支持设置成百分比，相对于容器高宽中较小的一项的一半。可以将内半径设大显示成圆环图（Donut chart）。</li><li><code>series-pie.center</code> 饼图的中心（圆心）坐标，数组的第一项是横坐标，第二项是纵坐标。支持设置成百分比，设置成百分比时第一项是相对于容器宽度，第二项是相对于容器高度。</li><li><code>series.selectedMode</code> 是否多选</li><li><code>series.startAngle</code> 起始角度，支持范围[0, 360]。</li><li><code>series.animationDuration</code> 初始动画执行时间 3000ms</li></ul>
+<p><img src="./mdimg/1470240171512_5.png" alt="饼图"></p>
 <h1 id="demo06-">demo06 仪表图</h1>
 <p>用于展示数据在某一区间具体的位置。<br>模拟运动的仪表盘。<br>code: 简单的实现方式。</p>
 <pre><code class="lang-javascript">var option = {
@@ -1304,7 +1307,171 @@ vertical-align:1px;
 };
 </code></pre>
 <p><img src="./mdimg/1470241013655_6.png" alt="仪表盘"></p>
+<h1 id="demo07-">demo07 双纵坐标轴</h1>
+<pre><code>var zhengfaliang = {
+    name: &#39;蒸发量&#39;,
+    type: &#39;bar&#39;,
+    data: [2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3]
+};
 
+var jiangshuiliang = {
+    name: &#39;降水量&#39;,
+    type: &#39;bar&#39;,
+    data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 180, 48.7, 18.8, 6.0, 2.3]
+};
+
+var pingjunwendu = {
+    name: &#39;平均温度&#39;,
+    type: &#39;line&#39;,
+    yAxisIndex: 1,
+    data: [2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2]
+};
+var option = {
+        title: {
+            text: &quot;降雨量&quot;,
+            left: &quot;left&quot;
+        },
+        legend: {
+            data: [&quot;蒸发量&quot;, &quot;降水量&quot;, &quot;平均温度&quot;]
+        },
+        tooltip: {
+            trigger: &quot;axis&quot;,
+            axisPointer: {
+                type: &quot;shadow&quot;
+            }
+        },
+        xAxis: {
+//            type: &quot;category&quot;,
+            data: [&#39;1月&#39;, &#39;2月&#39;, &#39;3月&#39;, &#39;4月&#39;, &#39;5月&#39;, &#39;6月&#39;, &#39;7月&#39;, &#39;8月&#39;, &#39;9月&#39;, &#39;10月&#39;, &#39;11月&#39;, &#39;12月&#39;]
+        },
+        yAxis: [
+            {
+                type: &quot;value&quot;,
+                name: &quot;水量&quot;,
+                axisLabel: {
+                    formatter: &#39;{value} ml&#39;
+                }
+            },
+            {
+                type: &quot;value&quot;,
+                name: &quot;温度&quot;,
+                axisLabel: {
+                    formatter: &quot;{value} ℃&quot;
+                }
+            }
+        ],
+        series: [zhengfaliang, jiangshuiliang, pingjunwendu]
+
+    };
+</code></pre><p><img src="./mdimg/demo07.png" alt="demo07"></p>
+<h1 id="demo08-">demo08 散点图</h1>
+<ul>
+<li><code>series.symbolSize</code> 形状大小 默认10</li><li><code>series.scatter.label</code> 图形上的文本标签 </li><li><code>series.scatter.itemStyle</code> 图形样式</li></ul>
+<pre><code>option = {
+    backgroundColor: new echarts.graphic.RadialGradient(0.3, 0.3, 0.8, [{
+        offset: 0,
+        color: &#39;#f7f8fa&#39;
+    }, {
+        offset: 1,
+        color: &#39;#cdd0d5&#39;
+    }]),
+    title: {
+        text: &#39;1990 与 2015 年各国家人均寿命与 GDP&#39;
+    },
+    legend: {
+        right: 10,
+        data: [&#39;1990&#39;, &#39;2015&#39;]
+    },
+    tooltip: {
+        formatter: function (d) {
+            var data = d.data;
+            var style = {};
+            style.year = &quot;&lt;div style=&#39;border-bottom: 1px solid #ddd&#39;&gt;&quot; + data[4] + &quot;年&lt;/div&gt;&quot;;
+            style.gdp = &quot;&lt;p&gt;GPD：&quot; + data[0] + &quot;&lt;/p&gt;&quot;;
+            style.old = &quot;&lt;p&gt;平均年龄：&quot; + data[1] + &quot;&lt;/p&gt;&quot;;
+            style.population = &quot;&lt;p&gt;人口：&quot; + data[2] + &quot;&lt;/p&gt;&quot;;
+            style.country = &quot;&lt;p&gt;国家：&quot; + data[3] + &quot;&lt;/p&gt;&quot;;
+            return style.year + style.gdp + style.old + style.population + style.country;
+        }
+    },
+    xAxis: {
+        splitLine: {
+            lineStyle: {
+                type: &#39;dashed&#39;
+            }
+        }
+    },
+    yAxis: {
+        splitLine: {
+            lineStyle: {
+                type: &#39;dashed&#39;
+            }
+        },
+        scale: true
+    },
+    series: [{
+        name: &#39;1990&#39;,
+        data: data[0], // GDP
+        type: &#39;scatter&#39;,
+        symbolSize: function (data) { // 形状太小，默认10，这里是根据人口来计算的大小
+            return Math.sqrt(data[2]) / 5e2; // 5e2= 5*(10*2)=500, so,9e3 = 9*(100*3) = 9000
+        },
+        label: { // 图形上的文本标签
+            normal: { // 放上去显示
+                show: true,
+                formatter: function (param) {
+                    return param.data[3];
+                },
+                position: &#39;bottom&#39;
+            }
+        },
+        itemStyle: { // 图形样式，有 normal 和 emphasis 两个状态。normal 是图形在默认状态下的样式；emphasis 是图形在高亮状态下的样式，比如在鼠标悬浮或者图例联动高亮时。
+            normal: {
+                shadowBlur: 10,
+                shadowColor: &#39;rgba(120, 36, 50, 0.5)&#39;,
+                shadowOffsetY: 5,
+                color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
+                    offset: 0,
+                    color: &#39;rgb(251, 118, 123)&#39;
+                }, {
+                    offset: 1,
+                    color: &#39;rgb(204, 46, 72)&#39;
+                }])
+            }
+        }
+    }, {
+        name: &#39;2015&#39;,
+        data: data[1], // 年龄
+        type: &#39;scatter&#39;,
+        symbolSize: function (data) {
+            return Math.sqrt(data[2]) / 5e2;
+        },
+        label: {
+            normal: {
+                show: true,
+                formatter: function (param) {
+                    return param.data[3];
+                },
+                position: &#39;top&#39;
+            }
+        },
+        itemStyle: {
+            normal: {
+                shadowBlur: 10,
+                shadowColor: &#39;rgba(25, 100, 150, 0.5)&#39;,
+                shadowOffsetY: 5,
+                color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
+                    offset: 0,
+                    color: &#39;rgb(129, 227, 238)&#39;
+                }, {
+                    offset: 1,
+                    color: &#39;rgb(25, 183, 207)&#39;
+                }])
+            }
+        }
+    }]
+};
+</code></pre>
 </body>
 </html>
 <!-- This document was created with MarkdownPad, the Markdown editor for Windows (http://markdownpad.com) -->

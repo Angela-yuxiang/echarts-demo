@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no"/>
+	<title>Document</title>
+	<script src="../assets/echarts.min.js"></script>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+		}
+	</style>
+</head>
+<body>
+<div id="container"></div>
+<script type="text/javascript">
+	var w = document.documentElement.clientWidth,
+			h = document.documentElement.clientHeight,
+			ctner = document.getElementById("container");
+	ctner.style.cssText = "width:" + w + "px;height:" + h + "px;";
+
+	var myChart = echarts.init(ctner);
+
+	var zhengfaliang = {
+		name: '蒸发量',
+		type: 'bar',
+		data: [2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3]
+	};
+
+	var jiangshuiliang = {
+		name: '降水量',
+		type: 'bar',
+		data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 180, 48.7, 18.8, 6.0, 2.3]
+	};
+
+	var pingjunwendu = {
+		name: '平均温度',
+		type: 'line',
+		yAxisIndex: 1,
+		data: [2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2]
+	};
+
+	var option = {
+		title: {
+			text: "降雨量",
+			left: "left"
+		},
+		legend: {
+			data: ["蒸发量", "降水量", "平均温度"]
+		},
+		tooltip: {
+			trigger: "axis",
+			axisPointer: {
+				type: "shadow"
+			}
+		},
+		xAxis: {
+//			type: "category",
+			data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+		},
+		yAxis: [
+			{
+				type: "value",
+				name: "水量",
+				axisLabel: {
+					formatter: '{value} ml'
+				}
+			},
+			{
+				type: "value",
+				name: "温度",
+				axisLabel: {
+					formatter: "{value} ℃"
+				}
+			}
+		],
+		series: [zhengfaliang, jiangshuiliang, pingjunwendu]
+
+	};
+
+	myChart.setOption(option);
+</script>
+</body>
+</html>
