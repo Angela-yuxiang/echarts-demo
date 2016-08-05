@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no"/>
+	<title>Document</title>
+	<script src="../assets/echarts.min.js"></script>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+		}
+	</style>
+</head>
+<body>
+<div id="container"></div>
+<script type="text/javascript">
+	var w = document.documentElement.clientWidth,
+			h = document.documentElement.clientHeight,
+			ctner = document.getElementById("container");
+	ctner.style.cssText = "width:" + w + "px;height:" + h + "px;";
+
+	var myChart = echarts.init(ctner);
+
+	var option = {
+		title: {
+			text: "横向柱状图"
+		},
+		legend: {
+			data: ["公司原因", "非公司原因"]
+		},
+		tooltip: {
+			trigger: "axis",
+			axisPointer: {
+				type: "shadow"
+			}
+//			formatter: '{a}<br />{b0}: {c0}<br />{b1}: {c1}'
+		},
+		yAxis: {
+			type: "category",
+			data: ["0小时", "1-2小时（含）", "3-4小时（含）", "5-6小时（含）"]
+		},
+		xAxis: {
+			type: "value",
+			boundaryGap: [0, 0.01]
+		},
+		series: [
+			{
+				name: "公司原因",
+				type: "bar",
+				data: [10, 20, 30, 40]
+			},
+			{
+				name: "非公司原因",
+				type: "bar",
+				data: [90, 80, 70, 60]
+			}
+		]
+	};
+
+	myChart.setOption(option);
+
+	myChart.on('click', function (params) {
+		console.log(params);
+		alert("你点击的地方包含参数:" +
+				"data:" + params.data +
+				",name:" + params.name +
+				",seriesName:" + params.seriesName);
+	});
+
+	myChart.on("legendselectchanged", function (params) {
+		console.log(params);
+		alert("当前点击的是：" + params.name);
+	});
+
+</script>
+</body>
+</html>

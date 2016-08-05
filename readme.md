@@ -563,3 +563,171 @@ option = {
 ![demo08](./mdimg/demo08.png)
 
 # demo09 dataZoom 区域缩放-用于大数据展示
+```
+var base = new Date(2004, 9, 3); // Thu Oct 03 1968 00:00:00 GMT+0800 (中国标准时间)
+base = +base; // -39340800000
+var oneDay = 24 * 3600 * 1000; // 一天转毫秒
+var date = [];
+var data = [Math.random() * 300];
+for (var i = 1; i < 1095; i++) {
+    // base += oneDay --- base = base+oneDay
+    var now = new Date(base += oneDay); // base值一直在增大
+    var dateArr = [now.getFullYear(), now.getMonth() + 1, now.getDate()];// 1968-10-4,1968-10-5,1968-10-6...
+    var dataRound = Math.round((Math.random() - 0.5) * 20 + data[i - 1]); // 可能是正数也可能是负数
+
+    date.push(dateArr.join('-'));
+    data.push(dataRound);
+}
+console.log(date.length); // 3549
+console.log(data.length); // 3650
+
+var option = {
+    tooltip: {
+        trigger: 'axis',
+        position: function (pt) {
+            return [pt[0], '10%']; // pt 是鼠标位置， [pt[0], '10%']代表固定在顶部10%位置
+        }
+    },
+    title: {
+        left: 'center',
+        text: '大数据量折线图'
+    },
+    legend: {
+        left: 'left',
+        data: ['legend']
+    },
+    toolbox: {
+        show: true,
+        feature: {
+            dataView: {show: true, readOnly: true},
+            dataZoom: {
+                show: true
+            },
+            restore: {show: true}
+        }
+    },
+    xAxis: {
+        type: "category",
+        data: date // 使用date的值刻度
+    },
+    yAxis: {},
+    dataZoom: [{
+        type: 'slider',
+//			zoomLock: true,
+        start: 0,
+        end: 10
+    }],
+    series: [
+        {
+            name: "legend", // 对应legend
+            type: "line",
+            smooth: true, // 是否平滑显示
+//				sampling: 'average',
+            data: data
+        }
+    ]
+```
+
+# demo10 横向柱状图 和 触发事件
+
+![demo10](./mdimg/demo10.png)
+
+**ECharts** 的api有：
+ - `echarts` 全局 echarts 对象，在 script 标签引入 echarts.js 文件后获得，或者在 AMD 环境中通过 require('echarts') 获得。
+ - `echartsInstance` 通过 [`echarts.init`](http://echarts.baidu.com/api.html#echarts.init) 创建的实例。
+ - `action` ECharts 中支持的图表行为，通过 [dispatchAction](http://echarts.baidu.com/api.html#echartsInstance.dispatchAction) 触发。
+ - `events` 在 ECharts 中主要通过 `on` 方法添加事件处理函数，该文档描述了所有 ECharts 的事件列表。
+
+events.鼠标事件
+鼠标事件的事件参数是事件对象的数据的各个属性，对于图表的点击事件，基本参数如下，其它图表诸如饼图可能会有部分附加参数。例如饼图会有percent属性表示百分比，具体见各个图表类型的 label formatter 回调函数的 params。
+`click`, `dblclick`, `mousedown`, `mouseup`, `mouseover`, `mouseout`, `globalout`
+
+参见 [ECharts 中的事件和行为](http://echarts.baidu.com/tutorial.html#ECharts%20%E4%B8%AD%E7%9A%84%E4%BA%8B%E4%BB%B6%E5%92%8C%E8%A1%8C%E4%B8%BA)
+
+所有的鼠标事件包含参数 params，这是一个包含点击图形的数据信息的对象，如下格式：
+```javascript
+{
+    // 当前点击的图形元素所属的组件名称，
+    // 其值如 'series'、'markLine'、'markPoint'、'timeLine' 等。
+    componentType: string,
+    // 系列类型。值可能为：'line'、'bar'、'pie' 等。当 componentType 为 'series' 时有意义。
+    seriesType: string,
+    // 系列在传入的 option.series 中的 index。当 componentType 为 'series' 时有意义。
+    seriesIndex: number,
+    // 系列名称。当 componentType 为 'series' 时有意义。
+    seriesName: string,
+    // 数据名，类目名
+    name: string,
+    // 数据在传入的 data 数组中的 index
+    dataIndex: number,
+    // 传入的原始数据项
+    data: Object,
+    // sankey、graph 等图表同时含有 nodeData 和 edgeData 两种 data，
+    // dataType 的值会是 'node' 或者 'edge'，表示当前点击在 node 还是 edge 上。
+    // 其他大部分图表中只有一种 data，dataType 无意义。
+    dataType: string,
+    // 传入的数据值
+    value: number|Array
+    // 数据图形的颜色。当 componentType 为 'series' 时有意义。
+    color: string
+}
+``` 
+如何区分鼠标点击到了哪里：
+```javascript
+myChart.on('click', function (params) {
+    if (params.componentType === 'markPoint') {
+        // 点击到了 markPoint 上
+        if (params.seriesIndex === 5) {
+            // 点击到了 index 为 5 的 series 的 markPoint 上。
+        }
+    }
+    else if (params.componentType === 'series') {
+        if (params.seriesType === 'graph') {
+            if (params.dataType === 'edge') {
+                // 点击到了 graph 的 edge（边）上。
+            }
+            else {
+                // 点击到了 graph 的 node（节点）上。
+            }
+        }
+    }
+
+});
+```
+
+你可以在回调函数中获得这个对象中的数据名、系列名称后在自己的数据仓库中索引得到其它的信息候更新图表，显示浮层等等，如下示例代码：
+
+```javascript
+myChart.on('click', function (parmas) {
+    $.get('detail?q=' + params.name, function (detail) {
+        myChart.setOption({
+            series: [{
+                name: 'pie',
+                // 通过饼图表现单个柱子中的数据分布
+                data: [detail.data]
+            }]
+        });
+    });
+});
+```
+组件交互的行为事件
+在 ECharts 中基本上所有的组件交互行为都会触发相应的事件，常用的事件和事件对应参数在 [`events`](http://echarts.baidu.com/api.html#events) 文档中有列出。
+下面是监听一个图例开关的示例：
+```javascript
+// 图例开关的行为只会触发 legendselectchanged 事件
+myChart.on('legendselectchanged', function (params) {
+    // 获取点击图例的选中状态
+    var isSelected = params.selected[params.name];
+    // 在控制台中打印
+    console.log((isSelected ? '选中了' : '取消选中了') + '图例' + params.name);
+    // 打印所有图例的状态
+    console.log(params.selected);
+});
+```
+代码触发 ECharts 中组件的行为
+上面提到诸如'legendselectchanged'事件会由组件交互的行为触发，那除了用户的交互操作，有时候也会有需要在程序里调用方法触发图表的行为，诸如显示 tooltip，选中图例。
+在 ECharts 2.x 是通过 myChart.component.tooltip.showTip 这种形式调用相应的接口触发图表行为，入口很深，而且涉及到内部组件的组织。相对地，在 ECharts 3 里改为通过调用 myChart.dispatchAction({ type: '' }) 触发图表行为，统一管理了所有动作，也可以方便地根据需要去记录用户的行为路径。
+常用的动作和动作对应参数在 [`action`](http://echarts.baidu.com/api.html#action) 文档中有列出。
+下面示例演示了如何通过dispatchAction去轮流高亮饼图的每个扇形。
+
+![eg](./mdimg/201685111602.png)
